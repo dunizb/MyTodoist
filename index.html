@@ -2,16 +2,50 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Demos 代码演示、代码片段 - 读你 | 这世间唯有梦想和好姑娘不可辜负!</title>
+    <title>My to do App | Demos 代码演示、代码片段 - 读你 | 这世间唯有梦想和好姑娘不可辜负!</title>
     <meta name="Keyword" content="代码演示,代码片段,HTML5,CSS3,JavaScript,jQuery,Bootstrap,Angular">
     <meta name="Author" content="dunizb">
     <meta name="website" content="http://www.dunizb.com">
     <meta name="Description" content="Demos 代码演示、代码片段 - 读你 | 这世间唯有梦想和好姑娘不可辜负!">
-    <link type="image/x-icon" rel="shortcut icon" href="favicon.ico"/>
+    <!--<link type="image/x-icon" rel="shortcut icon" href="favicon.ico"/>-->
+    <link rel="stylesheet" href="css/base.css"/>
 </head>
 <body>
 
+<div class="container">
+    <div class="add-task">
+        <input type="text"/>
+        <button>submit</button>
+    </div>
+    <!--清单列表开始-->
+    <div class="task-list">
+        <div class="task-item">
+            <span><input type="checkbox"/></span>
+            <span><span class="task-content">item content 1</span></span>
+            <span>delete</span>
+            <span>detail</span>
+        </div>
+    </div>
+    <!--清单列表结束-->
+    <!--任务详情开始-->
+    <div class="task-detail">
+        <div class="content"></div>
+        <div>
+            <div class="desc">
+                
+            </div>
+            <div class="remind">
+                <input type="date"/>
+                <button>submit</button>
+            </div>
+        </div>
+    </div>
+    <!--任务详情结束-->
+</div>
+
+
 <script src="node_modules/jquery/dist/jquery.min.js"></script>
+<script src="js/base.js"></script>
 <script type="text/javascript">
 
 </script>
