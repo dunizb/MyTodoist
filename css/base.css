@@ -65,7 +65,7 @@ input[type="date"]:focus{
 button{
     display: inline-block;
     cursor: pointer;
-    color: #333;
+    color: #fff;
 }
 
 .add_task input[type="text"]{
@@ -99,11 +99,11 @@ button{
     background: #ddd;
 }
 .task_item .task_item_content{
-    width: 85%;
+    width: 80%;
     float: left;
 }
 .task_item .task_item_operation{
-    width: 15%;
+    width: 20%;
     float: right;
     text-align: right;
 }

@@ -6,12 +6,13 @@
 
     var $content = $("#task_content"),
         $addTaskBtn = $("#add_task_btn"),
-        new_task = {},
-        task_list = [];
+        task_list = [],
+        $delete_task;
 
     init();
         
     $addTaskBtn.on("click", function(e){
+        var new_task = {};
         /* 获取新Task的值 */
         new_task.content = $content.val();
         /* 如果新Task的值为空则直接返回，否则继续执行 */
@@ -20,7 +21,7 @@
         if(addTask(new_task)){
             renderTaskList();
         }
-        $content.val("");
+        $content.val(null);
         console.log("new_task",new_task);
     });
 
@@ -37,16 +38,20 @@
         var $task_list = $(".task_list");
         $task_list.html("");
         for(var i=0; i<task_list.length; i++){
-            var $task = renderTaskTpl(task_list[i]);
+            var $task = renderTaskItem(task_list[i],i);
             $task_list.append($task);
         }
 
-        //console.log("renderTaskList() => ok");
+        $delete_task = $(".task_list").find(".del");
+
+        //console.log("$delete_task",$delete_task);
     }
 
-    function renderTaskTpl(data){
+    
+    function renderTaskItem(data,index){
+        if(!data || (!index && index != 0)) return;
         var task_item_tpl = `
-        <div class="task_item">
+        <div class="task_item" data-index="${index}">
             <div class="task_item_content">
                 <span><input type="checkbox"/></span>
                 <span class="task-content">${data.content}</span>
