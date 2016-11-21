@@ -6,8 +6,11 @@
 
     var $content = $("#task_content"),
         $addTaskBtn = $("#add_task_btn"),
+        $task_detail = $(".task_detail"),
+        $task_detail_mask = $(".task_detail_mask"),
         task_list = [],
-        $delete_task;
+        $delete_task_btn,
+        $detail_task_btn;
 
     init();
         
@@ -46,10 +49,12 @@
             $task_list.append($task);
         }
 
-        $delete_task = $(".task_list").find(".del");
+        $delete_task_btn = $(".task_list").find(".del");
+        $detail_task_btn = $(".task_list").find(".detail");
         listenTaskDelete();
+        listenTaskDetail()
 
-        //console.log("$delete_task",$delete_task);
+        //console.log("$delete_task_btn",$delete_task_btn);
     }
 
     /**
@@ -87,7 +92,7 @@
      * 查找并监听所有删除按钮的点击事件
      */
     function listenTaskDelete(){
-        $delete_task.on("click", function(){
+        $delete_task_btn.on("click", function(){
             var $this = $(this);
             var $item = $this.parent().parent();
             var index = $item.data("index");
@@ -105,6 +110,28 @@
         delete task_list[index];
         /*更新localStorage*/
         refreshTaskList();
+    }
+
+    /**
+     * 查找并监听所有详细按钮的点击事件
+     */
+    function listenTaskDetail(){
+        $detail_task_btn.on("click", function(){
+            var $this = $(this);
+            var $item = $this.parent().parent();
+            var index = $item.data("index");
+            showTaskDetail(index);
+        });
+    }
+
+    /**
+     * 显示Task详细信息
+     * @param  {int} index
+     */
+    function showTaskDetail(index){
+        if(!index && index != 0) return;
+        $task_detail_mask.show();
+        $task_detail.show();
     }
 
     function init(){
