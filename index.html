@@ -8,17 +8,25 @@
     <meta name="website" content="http://www.dunizb.com">
     <meta name="Description" content="Demos 代码演示、代码片段 - 读你 | 这世间唯有梦想和好姑娘不可辜负!">
     <!--<link type="image/x-icon" rel="shortcut icon" href="favicon.ico"/>-->
+    <link rel="stylesheet" type="text/css" href="./node_modules/normalize.css">
     <link rel="stylesheet" href="css/base.css"/>
 </head>
 <body>
 
 <div class="container">
+    <h1>我的Todo</h1>
     <div class="add-task">
         <input type="text"/>
         <button>submit</button>
     </div>
     <!--清单列表开始-->
     <div class="task-list">
+        <div class="task-item">
+            <span><input type="checkbox"/></span>
+            <span><span class="task-content">item content 1</span></span>
+            <span>delete</span>
+            <span>detail</span>
+        </div>
         <div class="task-item">
             <span><input type="checkbox"/></span>
             <span><span class="task-content">item content 1</span></span>
