@@ -19,18 +19,15 @@
         if(!new_task.content) return;
         /* 存入新Task */
         if(addTask(new_task)){
-            renderTaskList();
+            $content.val(null);
         }
-        $content.val(null);
-        console.log("new_task",new_task);
     });
 
     function addTask(new_task){
         /* 将新Task推入TaskList */
         task_list.push(new_task);
         /* 更新LocalStorege */
-        store.set("task_list",task_list);
-
+        refreshTaskList();
         return true;
     }
 
@@ -43,10 +40,35 @@
         }
 
         $delete_task = $(".task_list").find(".del");
+        listenTaskDelete();
 
         //console.log("$delete_task",$delete_task);
     }
 
+    function listenTaskDelete(){
+        $delete_task.on("click", function(){
+            var $this = $(this);
+            var $item = $this.parent().parent();
+            var index = $item.data("index");
+            var temp = confirm("确认删除？");
+            temp ? deleteTask(index) : null;
+        });
+    }
+
+    /**
+     * 刷新localStorage数据并渲染模版
+     */
+    function refreshTaskList(){
+        store.set("task_list",task_list);
+        renderTaskList();
+    }
+
+    function deleteTask(index){
+        if((!index && index != 0) || !task_list[index]) return;
+        delete task_list[index];
+        /*更新localStorage*/
+        refreshTaskList();
+    }
     
     function renderTaskItem(data,index){
         if(!data || (!index && index != 0)) return;
