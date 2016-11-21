@@ -23,6 +23,10 @@
         }
     });
 
+    /**
+     * 添加Task
+     * @param {String} 任务内容
+     */
     function addTask(new_task){
         /* 将新Task推入TaskList */
         task_list.push(new_task);
@@ -31,6 +35,9 @@
         return true;
     }
 
+    /**
+     * 渲染全部的Task
+     */
     function renderTaskList(){
         var $task_list = $(".task_list");
         $task_list.html("");
@@ -45,31 +52,12 @@
         //console.log("$delete_task",$delete_task);
     }
 
-    function listenTaskDelete(){
-        $delete_task.on("click", function(){
-            var $this = $(this);
-            var $item = $this.parent().parent();
-            var index = $item.data("index");
-            var temp = confirm("确认删除？");
-            temp ? deleteTask(index) : null;
-        });
-    }
-
     /**
-     * 刷新localStorage数据并渲染模版
+     * 渲染单条Task模版
+     * @param  {Object} data  task
+     * @param  {Int} index 序号
+     * @return {jQuery}    task对象
      */
-    function refreshTaskList(){
-        store.set("task_list",task_list);
-        renderTaskList();
-    }
-
-    function deleteTask(index){
-        if((!index && index != 0) || !task_list[index]) return;
-        delete task_list[index];
-        /*更新localStorage*/
-        refreshTaskList();
-    }
-    
     function renderTaskItem(data,index){
         if(!data || (!index && index != 0)) return;
         var task_item_tpl = `
@@ -87,11 +75,46 @@
         return $(task_item_tpl);
     }
 
+    /**
+     * 刷新localStorage数据并渲染模版
+     */
+    function refreshTaskList(){
+        store.set("task_list",task_list);
+        renderTaskList();
+    }
+
+    /**
+     * 查找并监听所有删除按钮的点击事件
+     */
+    function listenTaskDelete(){
+        $delete_task.on("click", function(){
+            var $this = $(this);
+            var $item = $this.parent().parent();
+            var index = $item.data("index");
+            var temp = confirm("确认删除？");
+            temp ? deleteTask(index) : null;
+        });
+    }
+
+    /**
+     * 删除Task
+     * @param  {int} index TaskId
+     */
+    function deleteTask(index){
+        if((!index && index != 0) || !task_list[index]) return;
+        delete task_list[index];
+        /*更新localStorage*/
+        refreshTaskList();
+    }
+
     function init(){
         task_list = store.get("task_list") || [];
         if(task_list.length) renderTaskList();
     }
 
+    /**
+     * 相应Enter键
+     */
     $content.keyup(function(e){
         if(e.key === "Enter"){
             $addTaskBtn.trigger("click");
