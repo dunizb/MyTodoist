@@ -26,6 +26,8 @@
         }
     });
 
+    $task_detail_mask.on("click" ,hideTaskDetail);
+
     /**
      * 添加Task
      * @param {String} 任务内容
@@ -130,8 +132,41 @@
      */
     function showTaskDetail(index){
         if(!index && index != 0) return;
+        renderTaskDetai(index);
         $task_detail_mask.show();
         $task_detail.show();
+    }
+
+    /**
+     * 渲染指定Task的详细信息
+     */
+    function renderTaskDetai(index){
+        var item = task_list[index];
+        if(!item) return;
+        var tpl = `
+        <div class="content">
+            ${item.content}
+        </div>
+        <div>
+            <div class="desc">
+                <textarea></textarea>
+            </div>
+            <div class="remind">
+                <input type="date"/>
+                <!-- <button type="submit">submit</button> -->
+            </div>
+        </div>`;
+        
+        $task_detail.html(null);
+        $task_detail.html(tpl);
+    }
+
+    /**
+     * 隐藏Task详细信息
+     */
+    function hideTaskDetail(){
+        $task_detail_mask.hide();
+        $task_detail.hide();
     }
 
     function init(){
