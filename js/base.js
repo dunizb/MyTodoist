@@ -14,6 +14,7 @@
         $task_detail_content,
         $task_detail_content_input,
         $delete_task_btn,
+        $checkbox_complete,
         $detail_task_btn;
 
     init();
@@ -49,18 +50,31 @@
      */
     function renderTaskList(){
         var $task_list = $(".task_list");
-        $task_list.html("");
+        $task_list.html('');
+        var complete_items = [];
         for(var i=0; i<task_list.length; i++){
-            var $task = renderTaskItem(task_list[i],i);
-            $task_list.prepend($task);
+            var item = task_list[i];
+            if(item && item.complete){
+                complete_items[i] = item;
+            }else{
+                var $task = renderTaskItem(task_list[i],i);
+                $task_list.prepend($task);
+            }
         }
 
+        for(var j=0; j<complete_items.length; j++){
+            $task = renderTaskItem(complete_items[j], j);
+            if(!$task) continue;
+            $task.addClass("completed");
+            $task_list.append($task);
+        }
+        
         $delete_task_btn = $(".task_list").find(".del");
         $detail_task_btn = $(".task_list").find(".detail");
+        $checkbox_complete = $(".task_list").find(".complete[type='checkbox']");
         listenTaskDelete();
-        listenTaskDetail()
-
-        //console.log("$delete_task_btn",$delete_task_btn);
+        listenTaskDetail();
+        listenCheckboxComplete();
     }
 
     /**
@@ -74,7 +88,7 @@
         var task_item_tpl = `
         <div class="task_item" data-index="${index}">
             <div class="task_item_content">
-                <span><input type="checkbox"/></span>
+                <span><input class="complete" ${data.complete ? 'checked' : ''} type="checkbox"/></span>
                 <span class="task-content">${data.content}</span>
             </div>
             <div class="task_item_operation">
@@ -100,8 +114,7 @@
     function listenTaskDelete(){
         $delete_task_btn.on("click", function(){
             var $this = $(this);
-            var $item = $this.parent().parent();
-            var index = $item.data("index");
+            var index = $this.parent().parent().data("index");
             var temp = confirm("确认删除？");
             temp ? deleteTask(index) : null;
         });
@@ -122,12 +135,32 @@
      * 查找并监听所有详细按钮的点击事件
      */
     function listenTaskDetail(){
+        var index;
+        $('.task_item').on('dblclick',function(){
+            index = $(this).data("index");
+            showTaskDetail(index);
+        });
+
         $detail_task_btn.on("click", function(){
             var $this = $(this);
             var $item = $this.parent().parent();
-            var index = $item.data("index");
+            index = $item.data("index");
             showTaskDetail(index);
         });
+    }
+
+    function listenCheckboxComplete(){
+        $checkbox_complete.on('click', function(){
+            var $this = $(this);
+            // var isComplete = $this.is(":checked");
+            var index = $this.parent().parent().parent().data("index");
+            var item = store.get('task_list')[index];
+            if(item.complete){
+                updateTask(index, {complete: false});
+            }else{
+                updateTask(index, {complete: true});
+            }
+        });        
     }
 
     /**
@@ -207,7 +240,7 @@
     function updateTask(index,data){
         if(!index || !task_list[index]) return;
 
-        task_list[index] = data;
+        task_list[index] = $.extend({}, task_list[index], data);
         refreshTaskList();
     }
 
