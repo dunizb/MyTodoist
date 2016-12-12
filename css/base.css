@@ -177,3 +177,27 @@ span.detail{
 span.detail:hover{
     background-color: #024402;
 }
+
+.msg{
+    display: none;
+    overflow: hidden;
+    text-align: center;
+    background-color: #ffe264;
+    padding: 10px;
+    color: #333;
+}
+.msg .msg-content{
+    float: left;
+}
+.msg .anchor{
+    float: right;
+    cursor: pointer;
+    font-size: 12px;
+    background: chartreuse;
+    padding: 3px 5px;
+    border-radius: 10%;
+}
+.alert{
+    width: 0;
+    height: 0;
+}

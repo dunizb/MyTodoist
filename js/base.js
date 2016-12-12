@@ -15,6 +15,10 @@
         $task_detail_content_input,
         $delete_task_btn,
         $checkbox_complete,
+        $msg = $(".msg"),
+        $msg_content = $msg.find('.msg-content'),
+        $msg_confirm = $msg.find('.comfirmed'),
+        $alter = $(".alert"),
         $detail_task_btn;
 
     init();
@@ -32,6 +36,12 @@
     });
 
     $task_detail_mask.on("click" ,hideTaskDetail);
+
+    function listenMsgEvent(){
+        $msg_confirm.on('click', function(){
+            hideMsg();
+        });
+    }
 
     /**
      * 添加Task
@@ -197,7 +207,8 @@
                 <textarea placeholder="添加描述" name="desc">${desc}</textarea>
             </div>
             <div class="remind input_item">
-                <input name="remind_date" type="date" value="${item.remind_date}"/>
+                <label>提醒时间</label>
+                <input class="datetime" name="remind_date" type="text" value="${item.remind_date || ''}"/>
             </div>
         </div>
         <div class="input_item"><button type="submit">更新</button></div>
@@ -206,6 +217,7 @@
         $task_detail.html(null);
         //替换旧模板
         $task_detail.html(tpl);
+        $('.datetime').datetimepicker();
         //选中其中的from元素，因为之后会使用其监听submit事件
         $update_form = $task_detail.find("form");
         //选中显示Task内容元素
@@ -255,9 +267,40 @@
 
     function init(){
         task_list = store.get("task_list") || [];
+        listenMsgEvent();
         if(task_list.length) renderTaskList();
+        TaskRemindCheck();
     }
 
+    function TaskRemindCheck(){
+        var currentTimestamp;
+        var timerId = setInterval(function(){
+            for(var i=0; i<task_list.length; i++){
+                var item = task_list[i], task_timestamp;
+                if(!item || !item.remind_date || item.informed) {
+                    continue;
+                }
+                currentTimestamp = new Date().getTime();
+                task_timestamp = new Date(item.remind_date).getTime();
+
+                if(currentTimestamp - task_timestamp >= 1){
+                    updateTask(i, {informed: true});
+                    showMsg(item.content);
+                }
+            }
+        },500);
+    }
+
+    function showMsg(msg){
+        if(!msg) return;
+        $msg_content.text(msg);
+        $alter.get(0).play();
+        $msg.show();
+    }
+
+    function hideMsg(){
+        $msg.hide();
+    }
     /**
      * 相应Enter键
      */
