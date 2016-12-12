@@ -52,7 +52,7 @@
         $task_list.html("");
         for(var i=0; i<task_list.length; i++){
             var $task = renderTaskItem(task_list[i],i);
-            $task_list.append($task);
+            $task_list.prepend($task);
         }
 
         $delete_task_btn = $(".task_list").find(".del");
@@ -136,8 +136,10 @@
      */
     function showTaskDetail(index){
         if(!index && index != 0) return;
+        //生成详情模版
         renderTaskDetai(index);
         current_index = index;
+        //显示详情模版，默认隐藏
         $task_detail_mask.show();
         $task_detail.show();
     }
@@ -156,46 +158,56 @@
         var tpl = `
         <form>
         <div class="content" >${content}</div>
-        <div><input type="text" name="content" value="${content}" style="display:none;"></div>
+        <div class="input_item"><input type="text" name="content" value="${content}" style="display:none;"></div>
         <div>
-            <div class="desc">
+            <div class="desc input_item">
                 <textarea placeholder="添加描述" name="desc">${desc}</textarea>
             </div>
-            <div class="remind">
+            <div class="remind input_item">
                 <input name="remind_date" type="date" value="${item.remind_date}"/>
-                <button type="submit">更新</button>
             </div>
         </div>
+        <div class="input_item"><button type="submit">更新</button></div>
         </form>`;
-        
+        //清空Task详情模版
         $task_detail.html(null);
+        //替换旧模板
         $task_detail.html(tpl);
-
+        //选中其中的from元素，因为之后会使用其监听submit事件
         $update_form = $task_detail.find("form");
+        //选中显示Task内容元素
         $task_detail_content = $task_detail.find(".content");
+        //选中显示Task input内容元素
         $task_detail_content_input = $task_detail.find("[name='content']");
 
+        //双击内容元素显示input，隐藏自己
         $task_detail_content.on("dblclick", function(){
             $task_detail_content_input.show();
+            $task_detail_content.hide();
         });    
-
+        //获取表单中各个input的值
         $update_form.on("submit", function(e){
             e.preventDefault();
             var data = {};
             data.content = $(this).find("[name='content']").val();
             data.desc = $(this).find("[name='desc']").val();
             data.remind_date = $(this).find("[name='remind_date']").val();
-            //console.log("data",data);
             updateTask(index,data);
+            hideTaskDetail();
         });
 
     }
 
+    /**
+     * 更新Task
+     * @param  {[type]} index [description]
+     * @param  {[type]} data  [description]
+     * @return {[type]}       [description]
+     */
     function updateTask(index,data){
         if(!index || !task_list[index]) return;
 
         task_list[index] = data;
-        //task_list[index] = $.merge({}, task_list[index], data);
         refreshTaskList();
     }
 
