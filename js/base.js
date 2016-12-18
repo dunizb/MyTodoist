@@ -30,26 +30,75 @@
      * @param  {[type]} arg [description]
      * @return {[type]}     [description]
      */
+        
+    $addTaskBtn.on("click", function(e){
+        var new_task = {};
+        /* 获取新Task的值 */
+        new_task.content = $content.val();
+        /* 如果新Task的值为空则直接返回，否则继续执行 */
+        if(!new_task.content) return;
+        /* 存入新Task */
+        if(addTask(new_task)){
+            $content.val(null);
+        }
+    });
+
+    $task_detail_mask.on("click" ,hideTaskDetail);
+
+    pop('aaa');
     function pop(arg){
         if(!arg){
             console.error('pop title is required');
         }
 
-        var conf = {}, $box, $mask;
+        var conf = {}
+        , $box
+        , $mask
+        , $title
+        , $content
+        , $confirm
+        , $cancel
+        , dfd
+        ;
 
-        $box = $('<div></div>')
+        dfd = $.Deferred();
+
+        $box = $(`<div>
+            <div class="pop-title">提示</div>
+            <div class="pop-content">操作失败！</div>
+            <div class="btn" style="position:relative;">
+                <button class="cancel">取消</button>
+                <button style="margin-right:5px;" class="primary confirm">确定</button>
+            </div>
+            </div>`)
             .css({
-                position: 'fiexd',
+                position: 'fixed',
                 width: 350,
-                height: 300,
+                height: 200,
+                color: '#444',
                 background: '#fff',
                 'border-radius': 3,
                 'box-shadow': '0 1px 2px rgba(0,0,0,.5)'
             });
 
+        $title = $box.find('.pop-title').css({
+            padding: '5px 10px',
+            'font-weight': 900,
+            'font-size': 20,
+            'text-align': 'center'
+        });    
+
+        $content = $box.find('.pop-content').css({
+            padding: '5px 10px',
+            'text-align': 'center'
+        });
+
+        $confirm = $box.find('button.confirm');
+        $cancel = $box.find('button.cancel');
+
         $mask = $('<div></div>')
             .css({
-                position: 'fiexd',
+                position: 'fixed',
                 background: 'rgba(0,0,0,.5)',
                 top: 0,
                 buttom: 0,
@@ -89,20 +138,6 @@
         $mask.appendTo($body);
         $box.appendTo($body);
     }
-        
-    $addTaskBtn.on("click", function(e){
-        var new_task = {};
-        /* 获取新Task的值 */
-        new_task.content = $content.val();
-        /* 如果新Task的值为空则直接返回，否则继续执行 */
-        if(!new_task.content) return;
-        /* 存入新Task */
-        if(addTask(new_task)){
-            $content.val(null);
-        }
-    });
-
-    $task_detail_mask.on("click" ,hideTaskDetail);
 
     function listenMsgEvent(){
         $msg_confirm.on('click', function(){
