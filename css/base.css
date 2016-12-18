@@ -204,4 +204,11 @@ span.detail:hover{
     height: 0;
 }
 
-.modal-confirm .button{width: 100px;}
+.modal-confirm .pop-content{font-size: 20px;}
+.modal-confirm .btn{
+    position: absolute;
+    padding-right:5px;
+    right: 0;
+    bottom: 5px;
+}
+.modal-confirm .btn button{width: 100px;}

@@ -64,22 +64,22 @@
 
 
         if(typeof arg == "string"){
-            conf.title = arg;
+            conf.content = arg;
         }else{
             conf = $.extend(conf, arg);
         }  
+        conf.title = "提示";
         conf.width = 350;
         conf.height = 200;
         conf.okText = "确定";
-        conf.cancelText = "取消";  
-        conf.content = "";
+        conf.cancelText = "取消";
 
         $box = $(`<div class="modal-confirm">
             <div class="pop-title">${conf.title}</div>
             <div class="pop-content">${conf.content}</div>
-            <div class="btn" style="position:absolut;padding-right:5px;">
-                <button class="cancel" style="width:50px">${conf.cancelText}</button>
-                <button class="primary confirm" style="width:50px">${conf.okText}</button>
+            <div class="btn">
+                <button class="cancel">${conf.cancelText}</button>
+                <button class="primary confirm">${conf.okText}</button>
             </div>
             </div>`)
             .css({
@@ -130,9 +130,13 @@
         $confirm.on('click', function(){
             confirmed = true;
         });
-        $cancel.on('click', function(){
+        $cancel.on('click', close);
+        $mask.on('click', close);
+
+        //关闭弹窗
+        function close(){
             confirmed = false;
-        });
+        }
 
         //销毁弹窗
         function deismissPop(){
