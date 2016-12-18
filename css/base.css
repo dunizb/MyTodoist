@@ -203,3 +203,5 @@ span.detail:hover{
     width: 0;
     height: 0;
 }
+
+.modal-confirm .button{width: 100px;}

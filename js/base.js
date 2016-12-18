@@ -5,7 +5,7 @@
     'use strict'
 
     var $content = $("#task_content"),
-        $window = $('window'),
+        $window = $(window),
         $body = $('body'),
         $addTaskBtn = $("#add_task_btn"),
         $task_detail = $(".task_detail"),
@@ -24,12 +24,6 @@
         $detail_task_btn;
 
     init();
-
-    /**
-     * 自定义Alert
-     * @param  {[type]} arg [description]
-     * @return {[type]}     [description]
-     */
         
     $addTaskBtn.on("click", function(e){
         var new_task = {};
@@ -44,8 +38,11 @@
     });
 
     $task_detail_mask.on("click" ,hideTaskDetail);
-
-    pop('aaa');
+    /**
+     * 自定义Alert
+     * @param  {[type]} arg [description]
+     * @return {[type]}     [description]
+     */
     function pop(arg){
         if(!arg){
             console.error('pop title is required');
@@ -58,27 +55,41 @@
         , $content
         , $confirm
         , $cancel
+        , confirmed
+        , timer
         , dfd
         ;
 
         dfd = $.Deferred();
 
-        $box = $(`<div>
-            <div class="pop-title">提示</div>
-            <div class="pop-content">操作失败！</div>
-            <div class="btn" style="position:relative;">
-                <button class="cancel">取消</button>
-                <button style="margin-right:5px;" class="primary confirm">确定</button>
+
+        if(typeof arg == "string"){
+            conf.title = arg;
+        }else{
+            conf = $.extend(conf, arg);
+        }  
+        conf.width = 350;
+        conf.height = 200;
+        conf.okText = "确定";
+        conf.cancelText = "取消";  
+        conf.content = "";
+
+        $box = $(`<div class="modal-confirm">
+            <div class="pop-title">${conf.title}</div>
+            <div class="pop-content">${conf.content}</div>
+            <div class="btn" style="position:absolut;padding-right:5px;">
+                <button class="cancel" style="width:50px">${conf.cancelText}</button>
+                <button class="primary confirm" style="width:50px">${conf.okText}</button>
             </div>
             </div>`)
             .css({
                 position: 'fixed',
-                width: 350,
-                height: 200,
+                width: conf.width,
+                height: conf.height,
                 color: '#444',
                 background: '#fff',
                 'border-radius': 3,
-                'box-shadow': '0 1px 2px rgba(0,0,0,.5)'
+                'box-shadow': '0 1px 2px rgba(0,0,0,0.5)'
             });
 
         $title = $box.find('.pop-title').css({
@@ -99,13 +110,35 @@
         $mask = $('<div></div>')
             .css({
                 position: 'fixed',
-                background: 'rgba(0,0,0,.5)',
+                background: 'rgba(0,0,0,0.5)',
                 top: 0,
                 buttom: 0,
                 left: 0,
-                right: 0
+                right: 0,
+                width: '100%',
+                height: '100%'
             });    
         
+        timer = setInterval(function(){
+            if(confirmed !== undefined){
+                dfd.resolve(confirmed);
+                clearInterval(timer);
+                deismissPop();
+            }
+        }, 50);
+
+        $confirm.on('click', function(){
+            confirmed = true;
+        });
+        $cancel.on('click', function(){
+            confirmed = false;
+        });
+
+        //销毁弹窗
+        function deismissPop(){
+            $mask.remove();
+            $box.remove();
+        }
         //调整box位置
         function adjustBoxPosition(){
             var window_width = $window.width()
@@ -125,18 +158,15 @@
             });
         }
 
+        $mask.appendTo($body);
+        $box.appendTo($body);
+
+        adjustBoxPosition();
         $window.on('resize', function() {
             adjustBoxPosition();
         });
 
-        if(typeof arg == "string"){
-            conf.title = arg;
-        }else{
-            conf = $.extend(conf, arg);
-        }    
-
-        $mask.appendTo($body);
-        $box.appendTo($body);
+        return dfd.promise();
     }
 
     function listenMsgEvent(){
@@ -227,8 +257,9 @@
         $delete_task_btn.on("click", function(){
             var $this = $(this);
             var index = $this.parent().parent().data("index");
-            var temp = confirm("确认删除？");
-            temp ? deleteTask(index) : null;
+            pop("确认删除？").then(function(r){
+                r ? deleteTask(index) : null;
+            });
         });
     }
 
