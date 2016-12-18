@@ -5,6 +5,8 @@
     'use strict'
 
     var $content = $("#task_content"),
+        $window = $('window'),
+        $body = $('body'),
         $addTaskBtn = $("#add_task_btn"),
         $task_detail = $(".task_detail"),
         $task_detail_mask = $(".task_detail_mask"),
@@ -22,6 +24,71 @@
         $detail_task_btn;
 
     init();
+
+    /**
+     * 自定义Alert
+     * @param  {[type]} arg [description]
+     * @return {[type]}     [description]
+     */
+    function pop(arg){
+        if(!arg){
+            console.error('pop title is required');
+        }
+
+        var conf = {}, $box, $mask;
+
+        $box = $('<div></div>')
+            .css({
+                position: 'fiexd',
+                width: 350,
+                height: 300,
+                background: '#fff',
+                'border-radius': 3,
+                'box-shadow': '0 1px 2px rgba(0,0,0,.5)'
+            });
+
+        $mask = $('<div></div>')
+            .css({
+                position: 'fiexd',
+                background: 'rgba(0,0,0,.5)',
+                top: 0,
+                buttom: 0,
+                left: 0,
+                right: 0
+            });    
+        
+        //调整box位置
+        function adjustBoxPosition(){
+            var window_width = $window.width()
+            ,window_height = $window.height()
+            ,box_width = $box.width()
+            ,box_height = $box.height()
+            ,move_x
+            ,move_y
+            ;
+
+            move_x = (window_width - box_width) / 2;
+            move_y = ((window_height - box_height) / 2) - 20;
+
+            $box.css({
+                left: move_x,
+                top: move_y
+            });
+        }
+
+        $window.on('resize', function() {
+            adjustBoxPosition();
+        });
+
+        if(typeof arg == "string"){
+            conf.title = arg;
+        }else{
+            conf = $.extend(conf, arg);
+        }    
+
+        $mask.appendTo($body);
+        $box.appendTo($body);
+    }
         
     $addTaskBtn.on("click", function(e){
         var new_task = {};
