@@ -127,15 +127,17 @@
             }
         }, 50);
 
-        $confirm.on('click', function(){
-            confirmed = true;
-        });
+        $confirm.on('click', open);
         $cancel.on('click', close);
         $mask.on('click', close);
 
         //关闭弹窗
         function close(){
             confirmed = false;
+        }
+        //开启
+        function open(){
+            confirmed = true;
         }
 
         //销毁弹窗
