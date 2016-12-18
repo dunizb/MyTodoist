@@ -22,5 +22,3 @@
 ## 使用
 
 使用前请`npm install`下载jquery和store.js
-
-**正在开发中，敬请关注.....**
