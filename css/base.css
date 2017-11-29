@@ -66,6 +66,8 @@ button{
     display: inline-block;
     cursor: pointer;
     color: #fff;
+    background-color: #ccc;
+    outline: none;
 }
 
 .add_task input[type="text"]{
