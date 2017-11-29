@@ -43,6 +43,7 @@ textarea,
 input[type="text"],input[type="date"]{
     display: block;
     width: 100%;
+    height: 35px;
     background-color: #ddd;
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, .3);
 }
@@ -81,6 +82,7 @@ button.primary,
 }
 .add_task [type="submit"]{
     width: 15%;
+    height: 35px;
 }
 .add_task [type="submit"],
 .task_item{
@@ -120,12 +122,14 @@ button.primary,
 .task_item .task_item_content{
     width: 80%;
     float: left;
+    line-height: 20px;
 }
 .task_item .task_item_operation{
     width: 20%;
     float: right;
     text-align: right;
     font-size: 12px;
+    line-height: 20px;
 }
 .task_item .task_item_operation span{
     /* color: #fff;
