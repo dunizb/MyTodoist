@@ -125,11 +125,25 @@ button.primary,
     width: 20%;
     float: right;
     text-align: right;
+    font-size: 12px;
 }
 .task_item .task_item_operation span{
-    color: #fff;
+    /* color: #fff;
     padding: 2px 5px;
-    border-radius: 5px;
+    border-radius: 5px; */
+}
+
+span.del{
+     color: #f33a3a; 
+}
+span.del:hover{
+     color: #fb0505; 
+}
+span.detail{
+    color: #3bad3b; 
+}
+span.detail:hover{
+    color: #024402; 
 }
 
 .task_detail,
@@ -169,19 +183,6 @@ button.primary,
     background-color: rgba(30,30,30,.6);
 }
 
-span.del{
-    background-color: #f33a3a;
-}
-span.del:hover{
-    background-color: #fb0505;
-}
-span.detail{
-    background-color: #3bad3b;
-}
-span.detail:hover{
-    background-color: #024402;
-}
-
 .msg{
     display: none;
     overflow: hidden;
@@ -214,3 +215,45 @@ span.detail:hover{
     bottom: 5px;
 }
 .modal-confirm .btn button{width: 100px;}
+
+.about{
+    position: fixed;
+    background-color: #000;
+    width: 200px;
+    top: 0;
+    left: -42px;
+    text-align: left;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    padding-left: 40px;
+    display: inline-block;
+}
+.about a{
+    font-size: 14px;
+    color: #fff;
+    text-decoration: none;
+}
+.about a:link{
+    color: #fff;
+}
+.about a:hover,
+.about a:active{
+    color:#f33a3a;
+}
+.about a:visited{
+    color: #fff;
+}
+
+/* iphone5 ipod */
+@media screen and (device-width: 320px) and (device-height: 568px) {
+  .about {
+      left: 0;
+      top: auto;
+      bottom: 0;
+      text-align: center;
+      padding-left: 0;
+      width: 100%;
+      -webkit-transform: rotate(0);
+      transform: rotate(0);
+  }
+}
